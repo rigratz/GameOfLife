@@ -9,7 +9,19 @@
 
 </head>
 <body>
-    <canvas id="gol" tabindex="1" width="800" height="650" style="border: 1px solid brown; background: white"></canvas>
+    <canvas id="gol" tabindex="1" width="800" height="650" style="border: 1px solid black; background: white"></canvas>
+    <div>
+	    <button id="Start">Start</button>
+	    <button id="Pause">Pause</button>
+	    <button id="Clear">Clear</button>
+      <div id="slider">
+        Slow <input id="slide" type="range"
+        min="1" max="3" step=".25" value="1"
+        onchange="updateSlider(this.value)" />
+        Fast
+      </div><br/>
+	  </div>
     <script type="text/javascript" src="./main.js"></script>
+    <script type="text/javascript" src="./buttons.js"></script>
 </body>
 </html>

@@ -30,6 +30,9 @@ function Life(context) {
   this.field = null;
   this.timer = new Timer();
   this.clockTick = 0;
+  this.elapsed = 0;
+  this.delay = 0.25;
+  this.playing = false;
   this.ctx = context;
   this.randomlyGenerate();
 }
@@ -53,6 +56,7 @@ Life.prototype.randomlyGenerate = function() {
   this.field = lines;
 }
 Life.prototype.start = function() {
+  this.playing = true;
   var that = this;
   (function gameLoop() {
       that.loop();
@@ -60,18 +64,18 @@ Life.prototype.start = function() {
   })();
 }
 Life.prototype.loop = function() {
-  this.clockTick = this.timer.tick();
-  this.update();
-  this.draw();
-  console.log(loopnum);
-  console.log(loopnum);
-  console.log(loopnum);
-  console.log(loopnum);
-  console.log(loopnum++);
+  if (this.playing) {
+    this.clockTick = this.timer.tick();
+    this.elapsed += this.clockTick;
+    if (this.elapsed > this.delay) {
+      this.update();
+      this.draw();
+      this.elapsed = 0;
+    }
+  }
 }
 
 Life.prototype.update = function() {
-  //if (loopnum < 10) console.log(this.field);
 
   var line = [];
   var lines = [];
@@ -87,6 +91,7 @@ Life.prototype.update = function() {
   var neighbors = 0;
   for (var i = 0; i < 80; i++) {
     for (var j = 0; j < 65; j++) {
+      //Check Neighbors
       neighbors = 0;
       if (i > 0 && old[i-1][j] === "Alive") {
         neighbors += 1;
@@ -112,14 +117,8 @@ Life.prototype.update = function() {
       if (i < 79 && j < 64 && old[i+1][j+1] === "Alive") {
         neighbors += 1;
       }
-      //console.log(neighbors);
-      //console.log(i);
-      //console.log(j);
-      // if (2 <= neighbors <= 3) {
-      //   this.field[i][j] = "Alive";
-      // } else {
-      //   this.field = "Dead";
-      // }
+
+      //Determine if alive
       if (this.field[i][j] === "Alive") {
         if (neighbors === 2 || neighbors === 3) {
           this.field[i][j] = "Alive";
@@ -131,28 +130,17 @@ Life.prototype.update = function() {
           this.field[i][j] = "Alive";
         }
       }
-      //console.log(this.field[i][j]);
-      var status = this.field[i][j];
-      // ctx.save();
-      // if (status === "Alive") {
-      //   ctx.fillStyle = "Blue";
-      // } else if (status === "Dead"){
-      //   ctx.fillStyle = "Green"
-      // } else if (status = "Barren") {
-      //   ctx.fillStyle = "White"
-      // }
-      // ctx.fillRect(i*10, j*10, 10, 10);
-      // ctx.restore();
     }
   }
 }
+
 Life.prototype.draw = function() {
   ctx.clearRect(0,0,800, 650);
   ctx.save();
   //console.log("drawing");
   for (var i = 0; i < 80; i++) {
     for (var j = 0; j < 65; j++) {
-      var status = conway.field[i][j];
+      var status = this.field[i][j];
       if (status === "Alive") {
         ctx.fillStyle = "Blue";
       } else if (status === "Dead"){
@@ -165,11 +153,3 @@ Life.prototype.draw = function() {
   }
   ctx.restore();
 }
-
-var conway = new Life(ctx);
-conway.start();
-// var that = conway;
-// (function gameLoop() {
-//     that.loop();
-//     requestAnimFrame(gameLoop, ctx.canvas);
-// })();
