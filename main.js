@@ -75,6 +75,16 @@ Life.prototype.loop = function() {
   }
 }
 
+// Life.prototype.loadState = function(data) {
+//   this.field = data.field;
+//   //this.timer = data.timer;
+//   //this.clockTick = data.clockTick;
+//   //this.elapsed = data.elapsed;
+//   this.delay = data.delay;
+//   this.playing = data.playing;
+//   this.ctx = data.ctx;
+// }
+
 Life.prototype.update = function() {
 
   var line = [];
